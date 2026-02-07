@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Rose Day ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #3b0b0b, #120000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffecec;
+  font-family: 'Georgia', serif;
+  overflow-x: hidden;
+}
+
+.container {
+  text-align: center;
+  max-width: 900px;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 34px;
+  margin-bottom: 10px;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.tap {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+/* Bouquet */
+.bouquet {
+  position: relative;
+  width: 260px;
+  height: 220px;
+  margin: 0 auto 40px;
+}
+
+.rose {
+  position: absolute;
+  width: 70px;
+  height: 200px;
+}
+
+.stem {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 5px;
+  height: 0;
+  background: linear-gradient(#2e8b57, #1f5f3f);
+  transform: translateX(-50%);
+  transition: height 1.5s;
+}
+
+.flower {
+  position: absolute;
+  top: 30px;
+  left: 5px;
+  width: 60px;
+  height: 60px;
+  background: crimson;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 1.5s;
+}
+
+.flower::before,
+.flower::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: crimson;
+  border-radius: 50%;
+}
+
+.flower::before { left: -30px; }
+.flower::after  { left: 30px; }
+
+/* Text */
+.quote {
+  font-size: 22px;
+  line-height: 1.6;
+  white-space: pre-line;
+  min-height: 260px;
+}
+
+.signature {
+  margin-top: 25px;
+  font-style: italic;
+}
+
+.final-line {
+  margin-top: 40px;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+/* Hearts */
+.heart {
+  position: fixed;
+  color: #ff6b6b;
+  animation: floatUp 6s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); opacity: 0; }
+  to { transform: translateY(-10vh); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" onclick="startLove()">
+
+  <!-- ✨ CHANGE HER NAME HERE -->
+  <h1 id="name">For You, My Love ❤️</h1>
+
+  <div class="tap">(Tap anywhere to bloom 🌹)</div>
+
+  <div class="bouquet" id="bouquet"></div>
+
+  <div class="quote" id="quote"></div>
+
+  <div class="signature" id="sign"></div>
+
+  <div class="final-line" id="final">
+    Distance means nothing when love is real ❤️
+  </div>
+
+</div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c38a5c6f2.mp3">
+</audio>
+
+<script>
+let started = false;
+
+const message = `My love, happy Rose Day 🌹
+
+I may not be able to give you flowers on our first Rose Day now,
+but this is for you, my love.
+
+Till we meet and I cherish you with lots of flowers,
+this is my little promise to you.
+
+I love you ❤️`;
+
+const signature = `Yours beloved,
+Obang
+(aka – gawar, chutiya, handsome bf 😌)`;
+
+function startLove() {
+  if (started) return;
+  started = true;
+
+  document.getElementById("name").style.opacity = 1;
+  document.getElementById("music").play();
+
+  createBouquet();
+  startTyping(message, document.getElementById("quote"), () => {
+    startTyping(signature, document.getElementById("sign"), () => {
+      document.getElementById("final").style.opacity = 1;
+    });
+  });
+
+  setInterval(createHeart, 500);
+}
+
+function createBouquet() {
+  const positions = [
+    [90, 0], [140, 20], [40, 20],
+    [170, 60], [10, 60],
+    [120, 90], [60, 90]
+  ];
+
+  positions.forEach((pos, i) => {
+    const rose = document.createElement("div");
+    rose.className = "rose";
+    rose.style.left = pos[0] + "px";
+    rose.style.top = pos[1] + "px";
+
+    rose.innerHTML = `
+      <div class="stem"></div>
+      <div class="flower"></div>
+    `;
+
+    document.getElementById("bouquet").appendChild(rose);
+
+    setTimeout(() => {
+      rose.querySelector(".stem").style.height = "140px";
+      rose.querySelector(".flower").style.transform = "scale(1)";
+    }, i * 300);
+  });
+}
+
+function startTyping(text, element, callback) {
+  let i = 0;
+  const interval = setInterval(() => {
+    element.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      if (callback) callback();
+    }
+  }, 40);
+}
+
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (16 + Math.random() * 20) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 6000);
+}
+</script>
+
+</body>
+</html>
